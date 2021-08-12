@@ -10,7 +10,7 @@ contract Token is ERC20("vibes", "VIBES"), Ownable {
         _mint(msg.sender, amount_);
     }
 
-    function burn(address account_, uint256 amount_) external {
+    function burn(address account_, uint256 amount_) external onlyOwner {
         _burn(account_, amount_);
     }
 }

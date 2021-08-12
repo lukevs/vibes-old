@@ -1,10 +1,10 @@
 import hre from "hardhat";
 import { Artifact } from "hardhat/types";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
+import { expect } from "chai";
 
-import { Greeter } from "../../typechain/Greeter";
+import { Token } from "../../typechain/Token";
 import { Signers } from "../types";
-import { shouldBehaveLikeGreeter } from "./Greeter.behavior";
 
 const { deployContract } = hre.waffle;
 
@@ -16,13 +16,14 @@ describe("Unit tests", function () {
     this.signers.admin = signers[0];
   });
 
-  describe("Greeter", function () {
+  describe("Token", function () {
     beforeEach(async function () {
-      const greeting: string = "Hello, world!";
-      const greeterArtifact: Artifact = await hre.artifacts.readArtifact("Greeter");
-      this.greeter = <Greeter>await deployContract(this.signers.admin, greeterArtifact, [greeting]);
+      const tokenArtifact: Artifact = await hre.artifacts.readArtifact("Token");
+      this.token = <Token>await deployContract(this.signers.admin, tokenArtifact, []);
     });
 
-    shouldBehaveLikeGreeter();
+    it("should have no supply", async function () {
+      expect(await this.token.connect(this.signers.admin).totalSupply()).to.equal(0);
+    });
   });
 });
